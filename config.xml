@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget id="com.dankert.clicker" version="1.0.0">
+    <name>DanKert Clicker</name>
+        <description>Web to APK build</description>
+            <author email="dankert@local">DanKert</author>
+
+                <content src="index.html" />
+                    <platform name="android" />
+                    </widget>
