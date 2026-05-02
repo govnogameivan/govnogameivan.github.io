@@ -20,20 +20,28 @@ jobs:
     - name: Install Cordova
       run: npm install -g cordova
 
-    - name: Build APK
+    - name: Create Cordova project and inject web app
       run: |
         cordova create app com.dankert.clicker DanKertClicker
         cd app
 
+        # заменить дефолтный web
         rm -rf www
         cp -r ../www www
+
+        # копируем конфиг
         cp ../config.xml config.xml
 
         cordova platform add android
         cordova build android
 
-    - name: Upload APK
+    - name: Debug - list build files
+      run: |
+        echo "Searching APK files..."
+        find . -type f -name "*.apk"
+
+    - name: Upload APK (auto-detect path)
       uses: actions/upload-artifact@v4
       with:
         name: apk-build
-        path: app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        path: "**/*.apk"
