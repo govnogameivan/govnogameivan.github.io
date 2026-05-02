@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Clicker, dev: dankert</title>
+    <style>
+        body { 
+            margin: 0; background: #1a1a2e; color: white; 
+            font-family: 'Segoe UI', sans-serif; display: flex; 
+            flex-direction: column; align-items: center; height: 100vh; 
+        }
+
+        #ui { margin-top: 50px; text-align: center; }
+        #money { font-size: 50px; font-weight: bold; color: #4ecca3; }
+        #mps { font-size: 18px; color: #95a5a6; }
+
+        /* Та самая кнопка */
+        #main-button {
+            margin-top: 60px; width: 220px; height: 220px;
+            background: #e94560; border: 8px solid #533440;
+            border-radius: 50%; cursor: pointer;
+            box-shadow: 0 10px 0 #941126, 0 20px 30px rgba(0,0,0,0.5);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; font-weight: bold; text-transform: uppercase;
+            transition: transform 0.05s;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        #main-button:active {
+            transform: translateY(8px);
+            box-shadow: 0 2px 0 #941126, 0 5px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Магазин */
+        #shop {
+            position: absolute; bottom: 40px; width: 90%;
+            background: #16213e; padding: 20px; border-radius: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+        }
+
+        .upgrade {
+            background: #0f3460; padding: 15px; border-radius: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid #4ecca3;
+        }
+
+        .upgrade:active { background: #1a1a2e; }
+        .price { color: #f1c40f; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="ui">
+        <div id="money">0</div>
+        <div id="mps">Доход: 0/сек</div>
+    </div>
+
+    <div id="main-button">ТАПАЙ!</div>
+
+    <div id="shop">
+        <div class="upgrade" id="buy-auto">
+            <div>
+                <strong>Автокликер</strong><br>
+                <small>Дает +1 монету в сек.</small>
+            </div>
+            <div class="price" id="price-tag">Цена: 15</div>
+        </div>
+    </div>
+
+    <script>
+        let money = 0;
+        let mps = 0; // Монеты в секунду
+        let autoPrice = 15;
+
+        const moneyDisplay = document.getElementById('money');
+        const mpsDisplay = document.getElementById('mps');
+        const mainBtn = document.getElementById('main-button');
+        const shopBtn = document.getElementById('buy-auto');
+        const priceTag = document.getElementById('price-tag');
+
+        // Клик по кнопке
+        mainBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            addMoney(1);
+        });
+
+        // Покупка автокликера
+        shopBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (money >= autoPrice) {
+                money -= autoPrice;
+                mps += 1;
+                autoPrice = Math.round(autoPrice * 1.5); // Цена растет
+                updateUI();
+            }
+        });
+
+        function addMoney(amount) {
+            money += amount;
+            updateUI();
+        }
+
+        function updateUI() {
+            moneyDisplay.innerText = Math.floor(money);
+            mpsDisplay.innerText = Доход: ${mps}/сек;
+            priceTag.innerText = Цена: ${autoPrice};
+            
+            // Полупрозрачность, если не хватает денег
+            shopBtn.style.opacity = money >= autoPrice ? "1" : "0.5";
+        }
+
+        // Цикл автоматического дохода
+        setInterval(() => {
+            if (mps > 0) {
+                money += mps / 10; // Начисляем часть каждую 0.1 сек для плавности
+                updateUI();
+            }
+        }, 100);
+    </script>
+</body>
+</html>
